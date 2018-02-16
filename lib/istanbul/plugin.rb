@@ -48,7 +48,7 @@ module Danger
       total_operators = results.map{|a| a[:total_lines]}.inject(0){|sum,x| sum + x }
       num_coverage_operators = results.map{|a| a[:lines_coverage]}.inject(0){|sum,x| sum + x }
       project_coverage = num_coverage_operators / total_operators
-      data = {
+      @data = {
         total_operators: total_operators,
         num_coverage_operators: num_coverage_operators,
         coverage: round(num_coverage_operators / total_operators) * 100,
@@ -57,6 +57,10 @@ module Danger
     end
 
     def check_coverage(verbose = false)
+
+      `export LC_ALL=C.UTF-8`
+      `export LANG=en_US.UTF-8`
+      `export LANGUAGE=en_US.UTF-8`
       
       php_files = git.modified_files.select{|a| a[/\.php/] && a[/src\//] && !a[/\.spec/] && !a['migrations'] }
 
