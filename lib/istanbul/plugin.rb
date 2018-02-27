@@ -79,10 +79,16 @@ module Danger
       puts "Verificando coverege de cada arquivo do pull request > #{min_coverage_for_file}" if verbose
       data[:childrens].select{|a| php_files.include?(a[:file])}.each do |file_coverage|
           if file_coverage[:coverage] < min_coverage_for_file
-              fail("#{file_coverage[:file]} coverage abaixo de #{min_coverage_for_file}%. Coverage atual: #{file_coverage[:coverage]}%")
+              fail("#{generate_link(file_coverage[:file])} coverage abaixo de #{min_coverage_for_file}%. Coverage atual: #{file_coverage[:coverage]}%")
           end
       end
 
+    end
+
+    def generate_link(file)
+      branch = github.branch_for_head
+      final_link = "../blob/#{branch}/#{file}"
+      "<a href='#{final_link}' title='#{file}' target='_blank'>#{file.split('/').last}</a>"
     end
     
     private
